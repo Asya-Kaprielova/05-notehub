@@ -1,5 +1,13 @@
-import ReactPaginate from 'react-paginate';
+import type { ComponentType } from "react";
+import ReactPaginateModule from "react-paginate";
+import type { ReactPaginateProps } from "react-paginate";
 import css from './Pagination.module.css';
+
+type ModuleWithDefault<T> = { default: T };
+
+const ReactPaginate = (
+  ReactPaginateModule as unknown as ModuleWithDefault<ComponentType<ReactPaginateProps>>
+).default;
 
 interface PaginationProps {
   pageCount: number;
@@ -8,11 +16,8 @@ interface PaginationProps {
 }
 
 export default function Pagination({ pageCount, currentPage, onPageChange }: PaginationProps) {
-  // Виправлення для типів імпорту react-paginate в суворих збірках Vite/TS
-  const Component = (ReactPaginate as unknown as { default: typeof ReactPaginate }).default || ReactPaginate;
-
   return (
-    <Component
+    <ReactPaginate
       pageCount={pageCount}
       forcePage={currentPage - 1}
       onPageChange={({ selected }: { selected: number }) => onPageChange(selected + 1)}
